@@ -1,8 +1,17 @@
 import path from 'node:path'
+import fs from 'node:fs/promises'
+import serveResponse from './serveResponse.js'
 
-const serveStatic = baseDir => {
-    const filepath = path.join(baseDir, 'public', 'index.html')
-    console.log(filepath)
+const serveStatic = async (res, baseDir) => {
+
+    const filePath = path.join(baseDir, 'public', 'index.html')
+
+    try {
+        const content = await fs.readFile(filePath)
+        serveResponse(res, 200, 'text/html', content)
+    } catch(err) {
+        console.log(err)
+    }
 }
 
 export default serveStatic
